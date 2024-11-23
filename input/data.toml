@@ -1,0 +1,36 @@
+#> This file is gather elementary constante and key for
+#> more user frendly and efficient code.
+#> You can direclty change parameters and key from
+#> this file or use the user interface provided by SV
+
+[USEFULL PATH]
+input_path = ../input/ ;
+test_path = ../input/tests/ ;
+out_path = ../output/ ;
+
+[USEFULL FILENAME]
+data_file = data.dat ;
+data_test_case1 = case1.dat ;
+data_test_case2 = case2.dat ;
+
+[STRUCTURED STATICAL MESHGRID]
+mesh_key = 1 ;
+Lx = 1.0 ;
+Ly = 1.0 ;
+hx = 0.1 ;
+hy = 0.1 ;
+
+[TOPOLOGY FUNCTION] (0: User define function, 1: Forward and Backward Step, 2: Gaussian function)
+topology_key = 1 ;
+
+[INITIAL WATER SURFACE] (0: User define function, 1:Dame configuration, 2: Unique wave)
+Water_Surface_key = 1 ;
+
+[RIEMANN SCHEME] (1: HLL, 2: HLLC, 3: VFRoe)
+R_Scheme_key = 1 ;
+
+[FINIT VOLUME SCHEME] (1: Berthon-Foucher)
+FV_Scheme_key = 1 ;
+
+
+
