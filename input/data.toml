@@ -1,20 +1,18 @@
-#> This file is gather elementary constante and key for
+#> This file is gather elementary parameters and key for
 #> more user frendly and efficient code.
 #> You can direclty change parameters and key from
 #> this file or use the user interface provided by SV
 
-[NUMBER DATA] (N doesn't count)
-N = 15
+[VERSION]
+version = 0.0.1
 
 [USEFULL PATH]
 input_path = ../input/
 test_path = ../input/tests/
-out_path = ../output/
+output_path = ../output/
 
-[USEFULL FILENAME]
-data_file = data.dat
-data_test_case1 = case1.dat
-data_test_case2 = case2.dat
+[TEST CASE] (0: User define case, 1: case1, 2: case2)
+test_case_key = 0
 
 [MESH TYPE] (0: User define mesh, 1: Strctured statical mesh, 2: Unstructered statical mesh)
 mesh_key = 1

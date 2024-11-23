@@ -13,10 +13,10 @@ module toml_parser
     private :: extract_value
 
     public :: display_toml_file
+    public :: parse_toml
 
     integer, parameter  :: prec = 8
 
-    public :: parse_toml
     interface parse_toml
         module procedure parse_toml_string
         module procedure parse_toml_integer

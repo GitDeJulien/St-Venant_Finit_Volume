@@ -1,25 +1,16 @@
 program StVenant
 
     use precision
-    use toml_parser
+    use data_reader
     implicit none
 
-    character(len=256) :: filename, key, value
-    integer :: int_value
-    real(pr) :: real_value
-    logical :: logical_value
+    character(len=256) :: filepath
+    type(DataType)     :: df
 
-    filename = '../input/data.toml'
-    key = 'mesh_key'
+    filepath = '../input/data.toml'
 
-    call parse_toml(filename, key, value)
-    print *, 'String value: ', trim(value)
-
-    call parse_toml(filename, key, int_value)
-    print *, 'Integer value', int_value
-
-    call parse_toml(filename, key, real_value)
-    print *, 'Real value: ', real_value
+    call store_data(df, filepath)
+    call display_toml_file(filepath)
 
 
 
