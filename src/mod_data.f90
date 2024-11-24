@@ -1,4 +1,5 @@
 module data_reader
+
     use precision
     use toml_parser
     implicit none
