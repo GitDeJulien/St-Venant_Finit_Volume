@@ -21,6 +21,7 @@ Test_case_key = 0
 Mesh_key = 1
 
 [STRUCTURED STATICAL MESHGRID]
+#>add x_min, y_min
 Lx = 1.0
 Ly = 1.0
 Nx = 20

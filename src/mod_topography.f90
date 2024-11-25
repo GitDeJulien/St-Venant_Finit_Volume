@@ -57,6 +57,9 @@ contains
                         z0n(i) = 0.1
                     end if
                 end do
+            case default
+                z0n(:) = 1.0
+                print*, "Topography key unkown. Default set to 1.0"
 
         END SELECT
 
@@ -96,6 +99,9 @@ contains
                         end if
                     end do
                 end do
+            case default
+                z0n(:,:) = 1.0
+                print*, "Topography key unkown. Default set to 1.0"
 
         END SELECT
 
