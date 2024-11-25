@@ -9,7 +9,7 @@ module data_reader
     type, public :: DataType
 
         ![VERSION]
-        character(len=5) :: version
+        character(len=10) :: version
 
         ![USEFULL PATH]
         character(len=256) :: input_path

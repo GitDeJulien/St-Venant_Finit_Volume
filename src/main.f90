@@ -8,6 +8,7 @@ program StVenant
 
     use precision
     use data_reader
+    use topography_mod
     implicit none
 
     character(len=256) :: filepath
@@ -17,6 +18,10 @@ program StVenant
 
     call display_toml_file(filepath)
     call config_data(df, filepath)
+
+    !>TODO MESH MODULE
+
+    !call dl_topography(df%Topography_key, x_coord, tn, topo_filename)
     
 
 end program

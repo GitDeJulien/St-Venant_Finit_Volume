@@ -41,7 +41,7 @@ module toml_parser
         character(len=256) :: str_value
 
         call parse_toml_file(filename, key, str_value)
-        read(str_value, '(i4.1)') value
+        read(str_value, *) value
     end subroutine parse_toml_integer
 
     subroutine parse_toml_real(filename, key, value)

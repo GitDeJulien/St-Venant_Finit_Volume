@@ -23,8 +23,8 @@ Mesh_key = 1
 [STRUCTURED STATICAL MESHGRID]
 Lx = 1.0
 Ly = 1.0
-Nx = 0.1
-Ny = 0.1
+Nx = 20
+Ny = 10
 
 [TOPOGRAPHY FUNCTION] (0: User define function, 1: Forward and Backward Step, 2: Gaussian function)
 Topography_key = 1
