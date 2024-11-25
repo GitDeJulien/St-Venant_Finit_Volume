@@ -1,4 +1,4 @@
-#> This file is gather elementary parameters and key for
+#> This file gather elementary parameters and key for
 #> more user frendly and efficient code.
 #> You can direclty change parameters and key from
 #> this file or use the user interface provided by SV
@@ -11,23 +11,26 @@ input_path = ../input/
 test_path = ../input/tests/
 output_path = ../output/
 
+[DIMENSION] (1 or 2)
+Dimension = 1
+
 [TEST CASE] (0: User define case, 1: case1, 2: case2)
-test_case_key = 0
+Test_case_key = 0
 
 [MESH TYPE] (0: User define mesh, 1: Strctured statical mesh, 2: Unstructered statical mesh)
-mesh_key = 1
+Mesh_key = 1
 
 [STRUCTURED STATICAL MESHGRID]
 Lx = 1.0
 Ly = 1.0
-hx = 0.1
-hy = 0.1
+Nx = 0.1
+Ny = 0.1
 
-[TOPOLOGY FUNCTION] (0: User define function, 1: Forward and Backward Step, 2: Gaussian function)
-topology_key = 1
+[TOPOGRAPHY FUNCTION] (0: User define function, 1: Forward and Backward Step, 2: Gaussian function)
+Topography_key = 1
 
-[INITIAL WATER SURFACE] (0: User define function, 1:Dame configuration, 2: Unique wave)
-Water_Surface_key = 1
+[INITIAL CONDITION] (0: User define function, 1:Dame configuration, 2: Unique wave)
+Initial_key = 1
 
 [RIEMANN SCHEME] (1: HLL, 2: HLLC, 3: VFRoe)
 R_Scheme_key = 1
