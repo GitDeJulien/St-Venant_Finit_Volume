@@ -21,14 +21,15 @@ Test_case_key = 0
 Mesh_key = 1
 
 [STRUCTURED STATICAL MESHGRID]
-#>add x_min, y_min
-Lx = 1.0
+x_min = 0.0
+y_min = 0.0
+Lx = 25.0
 Ly = 1.0
-Nx = 20
-Ny = 10
+Nx = 100
+Ny = 3
 
-[TOPOGRAPHY FUNCTION] (0: User define function, 1: Forward and Backward Step, 2: Gaussian function)
-Topography_key = 1
+[TOPOGRAPHY FUNCTION] (0: User define function, 1: Const, 2: Sinus, 3: Bosse)
+Topography_key = 3
 
 [INITIAL CONDITION] (0: User define function, 1:Dame configuration, 2: Unique wave)
 Initial_key = 1

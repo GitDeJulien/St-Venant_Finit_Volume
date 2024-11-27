@@ -9,19 +9,30 @@ program StVenant
     use precision
     use data_reader
     use topography_mod
+    use structured_mesh_mod
     implicit none
 
-    character(len=256) :: filepath
+    character(len=256) :: filepath, topo_filepath
+    !integer :: i
     type(DataType)     :: df
+    type(StructCelleType), dimension(:), allocatable :: celles
 
     filepath = 'input/data.toml'
+    topo_filepath = 'output/topo/topology.dat'
 
+    ! Display TOML data file
     call display_toml_file(filepath)
+
+    ! Read and stock all data from TOML data file
     call config_data(df, filepath)
 
-    !>TODO MESH MODULE
+    ! Build mesh
+    call init_mesh(df, celles)
 
-    !call dl_topography(df%Topography_key, x_coord, tn, topo_filename)
-    
+    ! Download the topology in 'output/topo/*'
+    call dl_topography(df, celles, 0.0_pr)
+
+    ! Deallocate all tensors
+    deallocate(celles)
 
 end program
