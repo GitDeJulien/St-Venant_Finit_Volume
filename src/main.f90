@@ -3,22 +3,18 @@
 
 !> Julien Tenaud 2024
 
-
 program StVenant
 
-    use precision
-    use data_reader
-    use topography_mod
-    use structured_mesh_mod
+    use init_mod
     implicit none
 
-    character(len=256) :: filepath, topo_filepath
-    !integer :: i
-    type(DataType)     :: df
+    character(len=256)                  :: filepath
+    real(pr), dimension(:), allocatable :: Hsol, Qsol
+    type(DataType)                      :: df
     type(StructCelleType), dimension(:), allocatable :: celles
 
+
     filepath = 'input/data.toml'
-    topo_filepath = 'output/topo/topology.dat'
 
     ! Display TOML data file
     call display_toml_file(filepath)
@@ -30,9 +26,14 @@ program StVenant
     call init_mesh(df, celles)
 
     ! Download the topology in 'output/topo/*'
-    call dl_topography(df, celles, 0.0_pr)
+    call save_topography(df, celles, 0.0_pr)
+
+    allocate(Hsol(df%n_celle))
+    allocate(Qsol(df%n_celle))
+
+    call init_sol(df, celles, Hsol, Qsol)
 
     ! Deallocate all tensors
     deallocate(celles)
-
+    deallocate(Hsol, Qsol)
 end program

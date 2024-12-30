@@ -28,17 +28,19 @@ Ly = 1.0
 Nx = 100
 Ny = 3
 
-[TOPOGRAPHY FUNCTION] (0: User define function, 1: Const, 2: Sinus, 3: Bosse)
-Topography_key = 3
-
-[INITIAL CONDITION] (0: User define function, 1:Dame configuration, 2: Unique wave)
-Initial_key = 1
-
 [RIEMANN SCHEME] (1: HLL, 2: HLLC, 3: VFRoe)
 R_Scheme_key = 1
 
 [FINIT VOLUME SCHEME] (1: Berthon-Foucher)
 FV_Scheme_key = 1
+
+[NUMERICAL TEST]
+#> 1: Dam-break
+#> 2: Subcritical and transcritical flow over a bump
+#> 3: Streaming failure
+#> 4: Discontinuous topography with resonant regime
+#> 5: Thacker’s test
+test_case = 1
 
 [END OF FILE]
 

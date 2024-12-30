@@ -36,17 +36,19 @@ module data_reader
         real(pr) :: dx
         real(pr) :: dy
 
-        ![TOPOLOGY FUNCTION] (0: User define function, 1: Forward and Backward Step, 2: Gaussian function)
-        integer :: Topography_key
-
-        ![INITIAL WATER SURFACE] (0: User define function, 1:Dame configuration, 2: Unique wave)
-        integer :: Initial_key
-
         ![RIEMANN SCHEME] (1: HLL, 2: HLLC, 3: VFRoe)
         integer :: R_Scheme_key
 
         ![FINIT VOLUME SCHEME] (1: Berthon-Foucher)
         integer :: FV_Scheme_key
+
+        ![NUMERICAL TEST]
+        !> 1: Dam-break
+        !> 2: Subcritical and transcritical flow over a bump
+        !> 3: Streaming failure
+        !> 4: Discontinuous topography with resonant regime
+        !> 5: Thacker’s test
+        integer test_case
 
     end type DataType
 
@@ -69,20 +71,19 @@ contains
         call parse_toml(filename, "Ly", data%Ly)
         call parse_toml(filename, "Nx", data%Nx)
         call parse_toml(filename, "Ny", data%Ny)
-        call parse_toml(filename, "Topography_key", data%Topography_key)
-        call parse_toml(filename, "Initial_key", data%Initial_key)
+        call parse_toml(filename, "test_case", data%test_case)
         call parse_toml(filename, "R_Scheme_key", data%R_Scheme_key)
         call parse_toml(filename, "FV_Scheme_key", data%FV_Scheme_key)
 
         if (data%mesh_key == 1) then
-            data%dx = data%Lx / (data%Nx)
-            data%dy = data%Ly / (data%Ny)
+            data%dx = data%Lx / (data%Nx-1)
+            data%dy = data%Ly / (data%Ny-1)
         end if
 
         if (data%Dimension == 1) then
-            data%n_celle = data%Nx-1
+            data%n_celle = data%Nx
         else if (data%Dimension == 2) then
-            data%n_celle = (data%Nx-1) * (data%Ny-1)
+            data%n_celle = (data%Nx) * (data%Ny)
         else
             print*, "Error: Dimension can't be greater than 2"
             stop
