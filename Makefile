@@ -26,6 +26,7 @@ SRC_FILES = $(SRC_DIR)/mod_data.f90 \
 			$(SRC_DIR)/mod_exact_sol.f90 \
 			$(SRC_DIR)/mod_flux.f90 \
 			$(SRC_DIR)/mod_time_scheme.f90 \
+			$(SRC_DIR)/mod_save_out.f90 \
 			$(SRC_DIR)/main.f90 \
 
 SUB_FILES = $(wildcard $(SUB_DIR)/*.f90)
@@ -90,10 +91,8 @@ clean:
 clear:
 	$(RM) ./output/*.dat
 	$(RM) ./output/topo/*.dat
-
-
-
-
+	$(RM) ./output/exact1D/*.dat
+	$(RM) ./output/sol1D/*.dat
 
 
 

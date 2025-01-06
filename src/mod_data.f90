@@ -31,12 +31,12 @@ module data_reader
         ![TIME] (implicite scheme)
         real(pr) :: t0
         integer  :: niter
-        real(pr) :: tfinal
         real(pr) :: cfl
         real(pr) :: dt
 
         ![RIEMANN SCHEME] (1: HLL, 2: HLLC, 3: VFRoe)
-        integer :: R_Scheme_key
+        integer :: Riemann_solv
+        integer :: ordre
 
         ![FINIT VOLUME SCHEME] (1: Berthon-Foucher)
         integer :: FV_Scheme_key
@@ -70,16 +70,17 @@ contains
 
         call parse_toml(filename, "t0", data%t0)
         call parse_toml(filename, "niter", data%niter)
-        call parse_toml(filename, "tfinal", data%tfinal)
         call parse_toml(filename, "cfl", data%cfl)
 
         call parse_toml(filename, "test_case", data%test_case)
-        call parse_toml(filename, "R_Scheme_key", data%R_Scheme_key)
+        call parse_toml(filename, "Riemann_solv", data%Riemann_solv)
+        call parse_toml(filename, "ordre", data%ordre)
+
         call parse_toml(filename, "FV_Scheme_key", data%FV_Scheme_key)
 
         if (data%mesh_key == 1) then
-            data%dx = data%Lx / (data%Nx-1)
-            data%dy = data%Ly / (data%Ny-1)
+            data%dx = data%Lx / (data%Nx)
+            data%dy = data%Ly / (data%Ny)
         end if
 
         if (data%dim == 1) then

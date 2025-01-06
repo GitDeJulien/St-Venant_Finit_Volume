@@ -12,7 +12,7 @@ contains
         !In
         type(DataType)                                 :: df
         real(pr), dimension(df%n_celle, 2), intent(in) :: U
-        real(pr), dimension(df%n_celle), intent(in)    :: bi
+        real(pr), dimension(df%n_celle-1), intent(in)  :: bi
         integer, intent(in)                            :: li
 
         !Out
@@ -22,11 +22,11 @@ contains
 !!!     U(2) = q          F(U)(2) = q**2/h + g(h**2)/2
 
 
-        if (df%R_Scheme_key == 1) then
-            Fnum(1) = 0.5_pr*(U(li+1,2) + U(li,2)) - 0.5_pr*bi(li)*(U(li+1,1) + U(li,1))
+        if (df%Riemann_solv == 1) then
+            Fnum(1) = 0.5_pr*(U(li+1,2) + U(li,2)) - 0.5_pr*bi(li)*(U(li+1,1) - U(li,1))
             Fnum(2) = 0.5_pr*(U(li+1,2)*U(li+1,2)/U(li+1,1) + 0.5_pr*grav*U(li+1,1)*U(li+1,1) &
                         + U(li,2)*U(li,2)/U(li,1) + 0.5_pr*grav*U(li,1)*U(li,1)) - 0.5_pr*bi(li) &
-                        * (U(li+1,2) + U(li,2))
+                        * (U(li+1,2) - U(li,2))
         else
             print*, "Riemann solver key unknown"
             stop

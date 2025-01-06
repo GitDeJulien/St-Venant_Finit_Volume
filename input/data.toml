@@ -17,17 +17,17 @@ x_min = -20.0
 y_min = 0.0
 Lx = 40.0
 Ly = 1.0
-Nx = 100
+Nx = 200
 Ny = 3
 
 [TIME] (implicite scheme)
 t0 = 0.0
-niter = 10
-tfinal = 3.0
+niter = 100
 cfl = 0.8
 
 [RIEMANN SCHEME] (1: Rusanov, 2: HLL, 3: VFRoe)
-R_Scheme_key = 1
+Riemann_solv = 1
+ordre = 1
 
 [FINIT VOLUME SCHEME] (1: Berthon-Foucher)
 FV_Scheme_key = 1
