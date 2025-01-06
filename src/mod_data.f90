@@ -11,11 +11,6 @@ module data_reader
         ![VERSION]
         character(len=10) :: version
 
-        ![USEFULL PATH]
-        character(len=256) :: input_path
-        character(len=256) :: test_path
-        character(len=256) :: output_path
-
         ![DIMENSION] (1 or 2)
         integer :: dim
 
@@ -32,6 +27,13 @@ module data_reader
         integer :: n_celle
         real(pr) :: dx
         real(pr) :: dy
+
+        ![TIME] (implicite scheme)
+        real(pr) :: t0
+        integer  :: niter
+        real(pr) :: tfinal
+        real(pr) :: cfl
+        real(pr) :: dt
 
         ![RIEMANN SCHEME] (1: HLL, 2: HLLC, 3: VFRoe)
         integer :: R_Scheme_key
@@ -55,10 +57,8 @@ contains
         character(len=*), intent(in) :: filename
         type(DataType), intent(inout) :: data
 
+
         call parse_toml(filename, "version", data%version)
-        call parse_toml(filename, "input_path", data%input_path)
-        call parse_toml(filename, "test_path", data%test_path)
-        call parse_toml(filename, "output_path", data%output_path)
         call parse_toml(filename, "dim", data%dim)
         call parse_toml(filename, "Mesh_key", data%Mesh_key)
         call parse_toml(filename, "x_min", data%x_min)
@@ -67,6 +67,12 @@ contains
         call parse_toml(filename, "Ly", data%Ly)
         call parse_toml(filename, "Nx", data%Nx)
         call parse_toml(filename, "Ny", data%Ny)
+
+        call parse_toml(filename, "t0", data%t0)
+        call parse_toml(filename, "niter", data%niter)
+        call parse_toml(filename, "tfinal", data%tfinal)
+        call parse_toml(filename, "cfl", data%cfl)
+
         call parse_toml(filename, "test_case", data%test_case)
         call parse_toml(filename, "R_Scheme_key", data%R_Scheme_key)
         call parse_toml(filename, "FV_Scheme_key", data%FV_Scheme_key)
@@ -84,6 +90,8 @@ contains
             print*, "Error: dim can't be greater than 2"
             stop
         end if
+
+        data%dt = 1.0
 
     end subroutine config_data
     

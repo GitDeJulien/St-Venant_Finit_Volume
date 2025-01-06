@@ -2,6 +2,8 @@ module flux_mod
 
     use data_reader
     implicit none
+
+    public flux_num, eigen_values
     
 contains
 
