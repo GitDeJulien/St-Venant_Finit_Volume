@@ -4,6 +4,12 @@ module init_mod
     implicit none
 
     public init_sol
+
+    ! type, public :: SolType
+
+
+
+    ! end type
     
 contains
 
@@ -81,7 +87,7 @@ contains
         sol_filename = trim(adjustl(path))//'/sol_' // trim(adjustl(ch)) // '.dat'
 
         open(unit=10, file=sol_filename, status='REPLACE', action='WRITE')
-        SELECT CASE(df%Dimension)
+        SELECT CASE(df%dim)
         CASE(1)
             write(10,*) "## xk ", " SOL"
             do k=1,df%n_celle
@@ -94,7 +100,7 @@ contains
             end do
 
         CASE DEFAULT
-            print*, "Error: Dimension can't be greater than 2"
+            print*, "Error: dim can't be greater than 2"
             stop
 
         END SELECT

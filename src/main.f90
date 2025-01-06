@@ -9,7 +9,7 @@ program StVenant
     implicit none
 
     character(len=256)                  :: filepath
-    real(pr), dimension(:), allocatable :: Hsol, Qsol
+    real(pr), dimension(:,:), allocatable :: Uapp, Uexact
     type(DataType)                      :: df
     type(StructCelleType), dimension(:), allocatable :: celles
 
@@ -28,12 +28,13 @@ program StVenant
     ! Download the topology in 'output/topo/*'
     call save_topography(df, celles, 0.0_pr)
 
-    allocate(Hsol(df%n_celle))
-    allocate(Qsol(df%n_celle))
+    allocate(Uapp(df%n_celle, 2))
+    allocate(Uexact(df%n_celle, 2))
 
-    call init_sol(df, celles, Hsol, Qsol)
+    call init_sol(df, celles, Uapp(:,1), Uapp(:,2))
+
 
     ! Deallocate all tensors
     deallocate(celles)
-    deallocate(Hsol, Qsol)
+    deallocate(Uapp, Uexact)
 end program

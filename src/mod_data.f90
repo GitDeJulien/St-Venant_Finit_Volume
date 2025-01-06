@@ -17,10 +17,7 @@ module data_reader
         character(len=256) :: output_path
 
         ![DIMENSION] (1 or 2)
-        integer :: Dimension
-
-        ![TEST CASE] (0: User define case, 1: case1, 2: case2)
-        integer :: Test_case_key
+        integer :: dim
 
         ![MESH TYPE] (0: User define mesh, 1: Strctured statical mesh, 2: Unstructered statical mesh)
         integer :: Mesh_key
@@ -62,8 +59,7 @@ contains
         call parse_toml(filename, "input_path", data%input_path)
         call parse_toml(filename, "test_path", data%test_path)
         call parse_toml(filename, "output_path", data%output_path)
-        call parse_toml(filename, "Dimension", data%Dimension)
-        call parse_toml(filename, "Test_case_key", data%Test_case_key)
+        call parse_toml(filename, "dim", data%dim)
         call parse_toml(filename, "Mesh_key", data%Mesh_key)
         call parse_toml(filename, "x_min", data%x_min)
         call parse_toml(filename, "y_min", data%y_min)
@@ -80,12 +76,12 @@ contains
             data%dy = data%Ly / (data%Ny-1)
         end if
 
-        if (data%Dimension == 1) then
+        if (data%dim == 1) then
             data%n_celle = data%Nx
-        else if (data%Dimension == 2) then
+        else if (data%dim == 2) then
             data%n_celle = (data%Nx) * (data%Ny)
         else
-            print*, "Error: Dimension can't be greater than 2"
+            print*, "Error: dim can't be greater than 2"
             stop
         end if
 

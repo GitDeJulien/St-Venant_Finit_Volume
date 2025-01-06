@@ -38,11 +38,11 @@ contains
         
         !Local
         integer :: i, j, cd
-        real(pr), dimension(data%Nx) :: x_1D
-        real(pr), dimension(data%Nx,data%Ny) :: x_2D, y_2D
+        real(pr), dimension(data%Nx+1) :: x_1D
+        real(pr), dimension(data%Nx+1,data%Ny+1) :: x_2D, y_2D
 
-        if (data%Dimension == 1) then
-            allocate(kcelle(data%Nx-1))
+        if (data%dim == 1) then
+            allocate(kcelle(data%n_celle))
             call meshbuild(data, x_1D)
             do i=1,data%n_celle
                 kcelle(i)%code           = i
@@ -60,12 +60,12 @@ contains
                 end if
             end do
 
-        else if (data%Dimension == 2) then
-            allocate(kcelle((data%Nx-1)*(data%Ny-1)))
+        else if (data%dim == 2) then
+            allocate(kcelle(data%n_celle))
             call meshbuild(data, x_2D, y_2D)
             cd = 0
-            do j=1,data%Ny-1
-                do i=1,data%Nx-1
+            do j=1,data%Ny
+                do i=1,data%Nx
                     print*, "i*j=", i*j
                     cd                        = cd +1
                     kcelle(cd)%code           = cd
@@ -85,7 +85,7 @@ contains
             end do
 
         else
-            print*, "Error: Dimension can't be greater than 2"
+            print*, "Error: dim can't be greater than 2"
             stop
 
         end if

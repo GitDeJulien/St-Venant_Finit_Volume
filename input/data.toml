@@ -12,23 +12,20 @@ test_path = ../input/tests/
 output_path = ../output/
 
 [DIMENSION] (1 or 2)
-Dimension = 1
-
-[TEST CASE] (0: User define case, 1: case1, 2: case2)
-Test_case_key = 0
+dim = 1
 
 [MESH TYPE] (0: User define mesh, 1: Strctured statical mesh, 2: Unstructered statical mesh)
 Mesh_key = 1
 
 [STRUCTURED STATICAL MESHGRID]
-x_min = 0.0
+x_min = -20.0
 y_min = 0.0
-Lx = 25.0
+Lx = 40.0
 Ly = 1.0
 Nx = 100
 Ny = 3
 
-[RIEMANN SCHEME] (1: HLL, 2: HLLC, 3: VFRoe)
+[RIEMANN SCHEME] (1: Rusanov, 2: HLL, 3: VFRoe)
 R_Scheme_key = 1
 
 [FINIT VOLUME SCHEME] (1: Berthon-Foucher)

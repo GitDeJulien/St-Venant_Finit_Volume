@@ -104,7 +104,7 @@ contains
         topo_filename = 'output/topo/topo_' // trim(adjustl(ch)) // '.dat'
 
         open(unit=10, file=topo_filename, status='REPLACE', action='WRITE')
-        SELECT CASE(data%Dimension)
+        SELECT CASE(data%dim)
         CASE(1)
             write(10,*) "## xk ", " topo"
             do k=1,data%n_celle
@@ -118,7 +118,7 @@ contains
             end do
 
         CASE DEFAULT
-            print*, "Error: Dimension can't be greater than 2"
+            print*, "Error: dim can't be greater than 2"
             stop
 
         END SELECT
