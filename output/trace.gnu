@@ -29,12 +29,13 @@ set palette defined ( 0 '#F7FBFF',\
 set term gif animate 
 set output "sol.gif"
 
-do for [i = 0:100] {
+do for [i = 0:1000:5] {
     set title "iter = ".sprintf("%d", i)
     show title
 
     #-> 1D
-    plot "sol1D/sol.".i.".dat" u 1:2 title "Rusanov", "exact1D/sol.".i.".dat" u 1:2 title "solution exact", "topo/topo.".i.".dat" u 1:2 title "topography"
+    #plot "sol1D/sol.".i.".dat" u 1:2 title "Rusanov", "exact1D/sol.".i.".dat" u 1:2 title "solution exact"
+    plot "sol1D/sol.".i.".dat" u 1:3 title "Rusanov", "exact1D/sol.".i.".dat" u 1:3 lc 7 title "solution exact", "topo/topo.".i.".dat" u 1:2 w l lc 8 title "topography"
 
     # fait un affichage 2D en couleur
     #plot "./sol.".i.".dat" u 1:2:3 palette with image

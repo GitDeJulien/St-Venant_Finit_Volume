@@ -35,11 +35,11 @@ contains
     end function flux_num
 
 
-    function eigen_values(df, U) result(vp)
+    function eigen_values(df, Un) result(vp)
 
         !In
         type(DataType), intent(in)                     :: df
-        real(pr), dimension(df%n_celle, 2), intent(in) :: U
+        real(pr), dimension(df%n_celle, 2), intent(in) :: Un
 
         !Out
         real(pr), dimension(df%n_celle-1) :: vp
@@ -49,13 +49,29 @@ contains
         real(pr) :: ug, hg, ud, hd
 
         do li=1,df%n_celle-1
-            ug = U(li,2)/U(li,1)
-            ud = U(li+1,2)/U(li+1,1)
-            hg = U(li,1)
-            hd = U(li+1,1)
+            ug = Un(li,2)/Un(li,1)
+            ud = Un(li+1,2)/Un(li+1,1)
+            hg = Un(li,1)
+            hd = Un(li+1,1)
             vp(li) = max(abs(ug + sqrt(grav*hg)), abs(ud + sqrt(grav*hd)), abs(ug - sqrt(grav*hg)), abs(ud - sqrt(grav*hd)))
         enddo
 
     end function eigen_values
+
+    function sol_rewrite(df, Un, Topo) result(Wn)
+
+        !In
+        type(DataType), intent(in)           :: df
+        real(pr), dimension(:,:), intent(in) :: Un
+        real(pr), dimension(:), intent(in)   :: Topo
+
+
+        !Out
+        real(pr), dimension(df%n_celle, 2) :: Wn
+
+        Wn(:,1) = Un(:,1) + Topo(:)
+        Wn(:,2) = Wn(:,1) * Un(:,2)/Un(:,1)
+
+    end function sol_rewrite
     
 end module flux_mod

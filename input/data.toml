@@ -22,7 +22,7 @@ Ny = 3
 
 [TIME] (implicite scheme)
 t0 = 0.0
-niter = 100
+niter = 1000
 cfl = 0.8
 
 [RIEMANN SCHEME] (1: Rusanov, 2: HLL, 3: VFRoe)

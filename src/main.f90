@@ -13,6 +13,7 @@ program StVenant
 
     character(len=256)                               :: filepath
     real(pr), dimension(:,:), allocatable            :: Un, Unp1, Uexact
+    real(pr), dimension(:,:), allocatable            :: Wn
     real(pr), dimension(:), allocatable              :: Topo
     type(DataType)                                   :: df
     type(StructCelleType), dimension(:), allocatable :: celles
@@ -35,6 +36,7 @@ program StVenant
     
 
     allocate(Un(df%n_celle, 2))
+    allocate(Wn(df%n_celle, 2))
     allocate(Unp1(df%n_celle, 2))
     allocate(Uexact(df%n_celle, 2))
     allocate(Topo(df%n_celle))
@@ -43,23 +45,25 @@ program StVenant
     call exact_sol_fct(df, celles, 0.0_pr, Uexact(:,1), Uexact(:,2))
     Topo = topo_fct(df, celles, 0.0_pr)
 
+    Unp1 = Un
+    Wn = sol_rewrite(df, Un, Topo)
+
     ! Download datas
     call save_topography(df, celles, 0, Topo)
     call save_exact_sol(df, celles, 0, Uexact, Topo)
-    call save_approx_sol(df, celles, 0, Un, Topo)
+    call save_approx_sol(df, celles, 0, Un, Wn)
 
-    Unp1 = Un
-    df%dt = time_step(df, Un)
+    open(unit=20, file="output/error/err.dat", status='REPLACE', action='WRITE')
+    call save_error(df, Uexact, Un, 0, 20)
+
+    df%dt = time_step(df, Wn)
     tn = df%t0 + df%dt
 
     ! -- Time loop -- !
     do t_iter=1,df%niter
 
-
-        print*, "dt:", df%dt
-
         ! One more time step
-        Unp1 = advance(df, Un, Topo)
+        Unp1 = advance(df, Un, Wn)
 
         ! Topography
         Topo = topo_fct(df, celles, tn)
@@ -67,15 +71,17 @@ program StVenant
         ! Compute exact sol
         call exact_sol_fct(df, celles, tn, Uexact(:,1), Uexact(:,2))
 
-        ! Save datas
-        call save_approx_sol(df, celles, t_iter, Un, Topo)
-        call save_exact_sol(df, celles, t_iter, Uexact, Topo)
-        call save_topography(df, celles, t_iter, Topo)
-
         ! Update solution and time step
         Un = Unp1
-        df%dt = time_step(df, Un)
+        Wn = sol_rewrite(df, Un, Topo)
+        df%dt = time_step(df, Wn)
         tn = tn + df%dt
+
+        ! Save datas
+        call save_approx_sol(df, celles, t_iter, Un, Wn)
+        call save_exact_sol(df, celles, t_iter, Uexact, Topo)
+        call save_topography(df, celles, t_iter, Topo)
+        call save_error(df, Uexact, Un, t_iter, 20)
 
     enddo
     ! -- End Time loop -- !

@@ -7,14 +7,13 @@ module save_out_mod
     
 contains
 
-    subroutine save_approx_sol(df, celles, iter, Un, Topo)
+    subroutine save_approx_sol(df, celles, iter, Un, Wn)
 
         !In
         type(DataType), intent(in)                      :: df
         type(StructCelleType), dimension(:), intent(in) :: celles
         integer, intent(in)                             :: iter
-        real(pr), dimension(:,:), intent(in)            :: Un
-        real(pr), dimension(:), intent(in)              :: Topo
+        real(pr), dimension(:,:), intent(in)            :: Un, Wn
 
         !Local
         integer :: i, io
@@ -27,7 +26,7 @@ contains
 
             write(io, *) "## xk  ", "  h  ", "  u"
             do i=1,df%n_celle
-                write(io,*) celles(i)%center_x_coord, Un(i,1) + Topo(i), Un(i,2)/Un(i,1)
+                write(io,*) celles(i)%center_x_coord, Un(i,1), Wn(i,1), Un(i,2)/Un(i,1)
             enddo
 
         close(io)
@@ -55,7 +54,7 @@ contains
 
             write(io, *) "## xk  ", "  h_exact  ", "  u_exact"
             do i=1,df%n_celle
-                write(io,*) celles(i)%center_x_coord, Uexact(i,1) + Topo(i), Uexact(i,2)
+                write(io,*) celles(i)%center_x_coord, Uexact(i,1), Uexact(i,1) + Topo(i), Uexact(i,2)
             enddo
 
         close(io)
@@ -99,5 +98,32 @@ contains
         close(10)
 
     end subroutine save_topography
+
+    subroutine save_error(df, Uexact, Un, iter, io)
+
+        !In
+        type(DataType), intent(in) :: df
+        real(pr), dimension(:,:), intent(in) :: Uexact, Un
+        integer, intent(in) :: iter, io
+
+        !Local
+        real(pr) :: errorL2
+        ! real(pr) :: errorL1
+
+        errorL2 = SUM((Uexact(:,1)-Un(:,1))**2, 1) + SUM((Uexact(:,2)-Un(:,2))**2, 1)
+        errorL2 = SQRT(errorL2/(SUM(Uexact(:,1)) + SUM(Uexact(:,2)))**2)
+
+        ! errorL1 = SUM(ABS(Uexact(:,1)-Un(:,1))/ABS(Uexact(:,1)), 1) + SUM(ABS(Uexact(:,2)-Un(:,2))/ABS(Uexact(:,2)), 1)
+        ! errorL1 = 1._pr/df%n_celle*(errorL1)
+
+        print*, "L2 error: ", errorL2
+
+        if (iter == 0) write(io, *) "## error L2  "
+
+        write(io, *) errorL2
+
+        if (iter == df%niter) close(io)
+
+    end subroutine save_error
     
 end module save_out_mod
