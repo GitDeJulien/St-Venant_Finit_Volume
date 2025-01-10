@@ -69,43 +69,43 @@ contains
 
     end subroutine init_sol
 
-    subroutine save_sol(df, celles, path, tn, H, Q)
+    ! subroutine save_sol(df, celles, path, tn, H, Q)
 
-        !In
-        type(DataType), intent(in)                       :: df
-        type(StructCelleType), dimension(:), intent(in)  :: celles
-        character(len=*), intent(in)                     :: path
-        real(pr), intent(in)                             :: tn
-        real(pr), dimension(:), intent(in)               :: H, Q
+    !     !In
+    !     type(DataType), intent(in)                       :: df
+    !     type(StructCelleType), dimension(:), intent(in)  :: celles
+    !     character(len=*), intent(in)                     :: path
+    !     real(pr), intent(in)                             :: tn
+    !     real(pr), dimension(:), intent(in)               :: H, Q
 
-        !Local
-        integer            :: k
-        character(len=256) :: sol_filename
-        character(len=10)  :: ch
+    !     !Local
+    !     integer            :: k
+    !     character(len=256) :: sol_filename
+    !     character(len=10)  :: ch
 
-        WRITE(ch, '(1F4.1)') tn
-        sol_filename = trim(adjustl(path))//'/sol_' // trim(adjustl(ch)) // '.dat'
+    !     WRITE(ch, '(1F4.1)') tn
+    !     sol_filename = trim(adjustl(path))//'/sol_' // trim(adjustl(ch)) // '.dat'
 
-        open(unit=10, file=sol_filename, status='REPLACE', action='WRITE')
-        SELECT CASE(df%dim)
-        CASE(1)
-            write(10,*) "## xk ", " SOL"
-            do k=1,df%n_celle
-                write(10,*) celles(k)%center_x_coord, H(k), Q(k)/H(k)
-            end do
-        CASE(2)
-            write(10,*) "## xk ", " yk ", " SOL"
-            do k=1,df%n_celle
-                write(10,*) celles(k)%center_x_coord, celles(k)%center_y_coord, H(k), Q(k)/H(k)
-            end do
+    !     open(unit=10, file=sol_filename, status='REPLACE', action='WRITE')
+    !     SELECT CASE(df%dim)
+    !     CASE(1)
+    !         write(10,*) "## xk ", " SOL"
+    !         do k=1,df%n_celle
+    !             write(10,*) celles(k)%center_x_coord, H(k), Q(k)/H(k)
+    !         end do
+    !     CASE(2)
+    !         write(10,*) "## xk ", " yk ", " SOL"
+    !         do k=1,df%n_celle
+    !             write(10,*) celles(k)%center_x_coord, celles(k)%center_y_coord, H(k), Q(k)/H(k)
+    !         end do
 
-        CASE DEFAULT
-            print*, "Error: dim can't be greater than 2"
-            stop
+    !     CASE DEFAULT
+    !         print*, "Error: dim can't be greater than 2"
+    !         stop
 
-        END SELECT
-        close(10)
+    !     END SELECT
+    !     close(10)
 
-    end subroutine save_sol
+    ! end subroutine save_sol
     
 end module init_mod

@@ -74,8 +74,10 @@ program StVenant
         ! Update solution and time step
         Un = Unp1
         Wn = sol_rewrite(df, Un, Topo)
-        df%dt = time_step(df, Wn)
+        df%dt = time_step(df, Un)
         tn = tn + df%dt
+
+        print*, "invariant: ", SUM(Un(:,2)/Un(:,1) - 2*SQRT(grav*Un(:,1))), SUM(Un(:,2)/Un(:,1) + 2*SQRT(grav*Un(:,1)))
 
         ! Save datas
         call save_approx_sol(df, celles, t_iter, Un, Wn)

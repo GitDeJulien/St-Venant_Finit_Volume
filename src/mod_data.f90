@@ -25,6 +25,7 @@ module data_reader
         integer :: Nx
         integer :: Ny
         integer :: n_celle
+        integer :: n_edge
         real(pr) :: dx
         real(pr) :: dy
 
@@ -85,8 +86,10 @@ contains
 
         if (data%dim == 1) then
             data%n_celle = data%Nx
+            data%n_edge = data%Nx + 1
         else if (data%dim == 2) then
             data%n_celle = (data%Nx) * (data%Ny)
+            data%n_edge = 2*(data%Nx)*(data%Ny) + data%Nx + data%Ny
         else
             print*, "Error: dim can't be greater than 2"
             stop

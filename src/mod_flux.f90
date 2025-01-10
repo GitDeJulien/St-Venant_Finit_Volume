@@ -7,13 +7,13 @@ module flux_mod
     
 contains
 
-    function flux_num(df, U, bi, li)result(Fnum)
+    function flux_num(df, Ug, Ud, bi) result(Fnum)
 
         !In
-        type(DataType)                                 :: df
-        real(pr), dimension(df%n_celle, 2), intent(in) :: U
-        real(pr), dimension(df%n_celle-1), intent(in)  :: bi
-        integer, intent(in)                            :: li
+        type(DataType), intent(in)         :: df
+        real(pr), dimension(2), intent(in) :: Ug, Ud
+        real(pr), intent(in)               :: bi
+        !integer, intent(in)  :: li
 
         !Out
         real(pr), dimension(2)             :: Fnum
@@ -21,18 +21,66 @@ contains
 !!!     U(1) = h          F(U)(1) = q
 !!!     U(2) = q          F(U)(2) = q**2/h + g(h**2)/2
 
-
         if (df%Riemann_solv == 1) then
-            Fnum(1) = 0.5_pr*(U(li+1,2) + U(li,2)) - 0.5_pr*bi(li)*(U(li+1,1) - U(li,1))
-            Fnum(2) = 0.5_pr*(U(li+1,2)*U(li+1,2)/U(li+1,1) + 0.5_pr*grav*U(li+1,1)*U(li+1,1) &
-                        + U(li,2)*U(li,2)/U(li,1) + 0.5_pr*grav*U(li,1)*U(li,1)) - 0.5_pr*bi(li) &
-                        * (U(li+1,2) - U(li,2))
+
+            Fnum(1) = 0.5_pr*(Ud(2) + Ug(2)) - 0.5_pr*bi*(Ud(1) - Ug(1))
+            Fnum(2) = 0.5_pr*(Ud(2)*Ud(2)/Ud(1) + 0.5_pr*grav*Ud(1)*Ud(1) &
+                            + Ug(2)*Ug(2)/Ug(1) + 0.5_pr*grav*Ug(1)*Ug(1)) - 0.5_pr*bi &
+                            * (Ud(2) - Ug(2))
         else
             print*, "Riemann solver key unknown"
             stop
         endif
 
+
+        ! if (df%Riemann_solv == 1) then
+        !     Fnum(1) = 0.5_pr*(U(li+1,2) + U(li,2)) - 0.5_pr*bi(li)*(U(li+1,1) - U(li,1))
+        !     Fnum(2) = 0.5_pr*(U(li+1,2)*U(li+1,2)/U(li+1,1) + 0.5_pr*grav*U(li+1,1)*U(li+1,1) &
+        !                 + U(li,2)*U(li,2)/U(li,1) + 0.5_pr*grav*U(li,1)*U(li,1)) - 0.5_pr*bi(li) &
+        !                 * (U(li+1,2) - U(li,2))
+        ! else
+        !     print*, "Riemann solver key unknown"
+        !     stop
+        ! endif
+
+
+
     end function flux_num
+
+    function h_bar(Wg, Wd, flux) result(H)
+
+        !In
+        real(pr), dimension(2), intent(in) :: Wg, Wd
+        real(pr), dimension(2), intent(in) :: flux
+
+        !Out
+        real(pr) :: H
+
+
+        if (flux(1) > 0) then
+            H = Wg(1)
+        else
+            H = Wd(1)
+        endif
+
+    end function h_bar
+
+    function x_bar(Wg, Wd, Ug, Ud, flux) result(X)
+
+        !In
+        real(pr), dimension(2), intent(in) :: Wg, Wd, Ug, Ud
+        real(pr), dimension(2), intent(in) :: flux
+
+        !Out
+        real(pr) :: X
+
+        if (flux(1) > 0) then
+            X = Ug(1)/Wg(1)
+        else
+            X = Ud(1)/Wd(1)
+        endif
+
+    end function x_bar
 
 
     function eigen_values(df, Un) result(vp)

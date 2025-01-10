@@ -116,7 +116,7 @@ contains
         ! errorL1 = SUM(ABS(Uexact(:,1)-Un(:,1))/ABS(Uexact(:,1)), 1) + SUM(ABS(Uexact(:,2)-Un(:,2))/ABS(Uexact(:,2)), 1)
         ! errorL1 = 1._pr/df%n_celle*(errorL1)
 
-        print*, "L2 error: ", errorL2
+        !print*, "L2 error: ", errorL2
 
         if (iter == 0) write(io, *) "## error L2  "
 

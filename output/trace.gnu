@@ -20,7 +20,7 @@ set palette defined ( 0 '#F7FBFF',\
 # si affichage 3D, force l'étendue de l'axe des z. A changer selon les cas.
 #set zrange [0.0:0.2]
 #set xrange [0.0:1.0]
-#set yrange [0.0:1.0]
+set yrange [-0.5:2.5]
 
 # si affichage 3D, fixe le point de vue. A changer selon les cas.
 #set view 100,100
@@ -34,8 +34,9 @@ do for [i = 0:1000:5] {
     show title
 
     #-> 1D
-    #plot "sol1D/sol.".i.".dat" u 1:2 title "Rusanov", "exact1D/sol.".i.".dat" u 1:2 title "solution exact"
-    plot "sol1D/sol.".i.".dat" u 1:3 title "Rusanov", "exact1D/sol.".i.".dat" u 1:3 lc 7 title "solution exact", "topo/topo.".i.".dat" u 1:2 w l lc 8 title "topography"
+    #plot "sol1D/sol.".i.".dat" u 1:2 title "Rusanov", "exact1D/sol.".i.".dat" u 1:2 lc 7 w l title "solution exact"
+    #plot "sol1D/sol.".i.".dat" u 1:3 title "Rusanov", "exact1D/sol.".i.".dat" u 1:3 lc 7 w l title "solution exact", "topo/topo.".i.".dat" u 1:2 w l lc 8 title "topography"
+    plot "sol1D/sol.".i.".dat" u 1:4 title "Rusanov", "exact1D/sol.".i.".dat" u 1:4 lc 7 w l title "solution exact"
 
     # fait un affichage 2D en couleur
     #plot "./sol.".i.".dat" u 1:2:3 palette with image
