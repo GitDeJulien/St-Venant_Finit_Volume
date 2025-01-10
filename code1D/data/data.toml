@@ -1,0 +1,32 @@
+#> This file gather elementary parameters and key for
+#> more user frendly and efficient code.
+#> You can direclty change parameters and key from
+#> this file or use the user interface provided by SV
+
+[STRUCTURED STATICAL MESHGRID]
+x_min = -20.0
+Lx = 40.0
+Ly = 1.0
+Nx = 20
+
+[TIME] (VF scheme)
+t0 = 0.0
+niter = 1000
+cfl = 0.9
+
+[RIEMANN SCHEME] (1: Rusanov, 2: HLL, 3: VFRoe)
+Riemann_solv = 1
+
+[Ordre]
+ordre = 1
+
+[NUMERICAL TEST]
+#> 1: Dam-break
+#> 2: Subcritical and transcritical flow over a bump
+#> 3: Streaming failure
+#> 4: Discontinuous topography with resonant regime
+#> 5: Thacker’s test
+test_case = 1
+
+[END OF FILE]
+
