@@ -42,7 +42,7 @@ contains
             if (x_i(i) < lambda_g*tn) then
                 
                 sol_h(i) = h_init_am
-                sol_u(i) = 0.
+                sol_u(i) = 0.d0
                 
             else if (x_i(i) >= lambda_g*tn .AND. x_i(i) < lambda_etoile*tn) then
 
@@ -81,10 +81,10 @@ contains
 
         !imax = size(flux%hnp1)-2
         imax = df%Nx
-        eps = 10.**(-5)
+        eps = 1.d-5
 
 
-        h_etoile = 0.
+        h_etoile = 0.d0
         lambda_g = -sqrt(grav*h_init_am)
         hnp1 = h_init_am
 
@@ -92,9 +92,9 @@ contains
             
             h_etoile = hnp1
 
-            fn = 2*(sqrt(grav*h_init_am)-sqrt(grav*h_etoile))+(h_init_av-h_etoile)&
-                *sqrt(grav*(h_etoile+h_init_av)/(2*h_etoile*h_init_av))
-            fb = 2*(sqrt(grav*h_init_am)-sqrt(grav*h_init_av))
+            fn = 2.d0*(sqrt(grav*h_init_am)-sqrt(grav*h_etoile))+(h_init_av-h_etoile)&
+                *sqrt(grav*(h_etoile+h_init_av)/(2.d0*h_etoile*h_init_av))
+            fb = 2.d0*(sqrt(grav*h_init_am)-sqrt(grav*h_init_av))
 
             hnp1 = h_etoile - (h_init_av-h_etoile)/(fb-fn)*fn
 
@@ -102,7 +102,7 @@ contains
         
         h_etoile = hnp1
 
-        u_etoile = 2*(sqrt(grav*h_init_am)-sqrt(grav*h_etoile))
+        u_etoile = 2.d0*(sqrt(grav*h_init_am)-sqrt(grav*h_etoile))
         sigma = h_etoile*u_etoile/(h_etoile-h_init_av)
         lambda_etoile = u_etoile - sqrt(grav*h_etoile)
 
@@ -120,8 +120,9 @@ contains
 
 
         ksi = x/t
-        h = 1./(9*grav)*(2*sqrt(grav*h_init_am)-ksi)**2
-        u = 2*(sqrt(grav*h_init_am)-sqrt(grav*h))
+        h = 1./(9.d0*grav)*(2.d0*sqrt(grav*h_init_am)-ksi)*&
+            1./(9.d0*grav)*(2.d0*sqrt(grav*h_init_am)-ksi)
+        u = 2.d0*(sqrt(grav*h_init_am)-sqrt(grav*h))
 
     end subroutine
 

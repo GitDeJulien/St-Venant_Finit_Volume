@@ -18,19 +18,14 @@ contains
     subroutine advance(df, tn, Xab, Un, Wn, Topo)
 
         !In
-        
         real(pr), dimension(:), intent(in)   :: Xab
-        real(pr), dimension(:,:), intent(inout) :: Un
 
         !Inout
         type(DataType), intent(inout) :: df
         real(pr), intent(inout)       :: tn
+        real(pr), dimension(df%Nx,2), intent(inout) :: Un
         real(pr), dimension(df%Nx,2), intent(inout) :: Wn
-
-
-        !Out
-        !real(pr), dimension(df%Nx,2), intent(out) :: Unp1
-        real(pr), dimension(df%Nx), intent(out)   :: Topo
+        real(pr), dimension(df%Nx), intent(inout)   :: Topo
 
         !Local
         integer  :: e, i
@@ -40,15 +35,10 @@ contains
         real(pr), dimension(df%Nx-1, 2) :: F
         real(pr), dimension(1:df%Nx, 2) :: Upl, Upr, Wpl, Wpr
 
-
-
-        !Unp1 = Un
-
         SELECT CASE(df%ordre)
 
             CASE(1) ! -- Ordre 1
 
-                df%dt  = time_step(df, Wn)
                 lambda = df%dt/df%dx
 
                 ! -- Edge loop
@@ -66,6 +56,7 @@ contains
                 enddo
 
                 call cfl2(df, F, H)
+                df%dt  = time_step(df, Wn)
 
                 ! -- Celle loop
                 do i=2,df%Nx-1
@@ -85,8 +76,8 @@ contains
 
             CASE(2) ! -- Ordre 2 (MUSCL-Hancock scheme)
 
-                df%dt  = time_step(df, Un)
                 lambda = df%dt/df%dx
+
 
                 do i=2,df%Nx-1
                     
@@ -108,6 +99,8 @@ contains
 
                 Wpl = sol_rewrite(Upl, Topo)
                 Wpr = sol_rewrite(Upr, Topo)
+
+                df%dt  = time_step(df, Wpl, Wpr)
 
                 do e=1,df%Nx-1
 
@@ -151,7 +144,9 @@ contains
         END SELECT
 
         tn = tn + df%dt
-        Topo = topo_fct(df, Xab, tn)
+        do i=1,df%Nx
+            Topo(i) = topography1D(df, Xab(i), tn)
+        enddo
         Wn = sol_rewrite(Un, Topo)
 
 
@@ -186,11 +181,11 @@ contains
     end function dt_ordre1
 
 
-    function dt_ordre2(df, Upg, Upd) result(dt)
+    function dt_ordre2(df, Upl, Upr) result(dt)
         
         !In
         type(DataType), intent(in)           :: df
-        real(pr), dimension(:,:), intent(in) :: Upg, Upd
+        real(pr), dimension(:,:), intent(in) :: Upl, Upr
         
 
         !Out
@@ -203,9 +198,9 @@ contains
         lambda = df%cfl*df%dx
         vp_max = 0._pr
 
-        do i=1,df%Nx-2
+        do i=1,df%Nx-1
 
-            vp = eigen_value(Upg(i,:), Upd(i,:))
+            vp = max(eigen_value(Upl(i,:), Upr(i,:)), eigen_value(Upr(i,:), Upl(i+1,:)))
             if (vp_max < vp) vp_max = vp
 
         enddo
@@ -216,6 +211,9 @@ contains
 
 
     subroutine cfl2(df, Fn, H)
+
+        !! Verify the second CFL condition
+        !! due to topography integration
         
         !In
         type(DataType), intent(in)           :: df

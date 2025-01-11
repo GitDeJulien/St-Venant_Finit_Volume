@@ -17,9 +17,9 @@ program StVenant
     implicit none
 
     character(len=125)                      :: filepath, ch_Nx, ch_Riemann
-    integer                                 :: ios
+    integer                                 :: ios, k
     real(pr), dimension(:), allocatable     :: X
-    real(pr), dimension(:,:), allocatable   :: Un, Unp1, Uexact
+    real(pr), dimension(:,:), allocatable   :: Un, Uexact
     real(pr), dimension(:,:), allocatable   :: Wn
     real(pr), dimension(:), allocatable     :: Topo
     type(DataType)                          :: df
@@ -43,15 +43,15 @@ program StVenant
     ! Vectors allocation
     allocate(Un(df%Nx, 2))
     allocate(Wn(df%Nx, 2))
-    allocate(Unp1(df%Nx, 2))
     allocate(Uexact(df%Nx, 2))
     allocate(Topo(df%Nx))
 
     call init_sol(df, X, Un)
     call exact_sol_fct(df, X, 0.0_pr, Uexact(:,1), Uexact(:,2))
-    Topo = topo_fct(df, X, 0.0_pr)
+    do k=1,df%Nx
+        Topo(k) = topography1D(df, X(k), 0.d0)
+    enddo
 
-    Unp1 = Un
     Wn = sol_rewrite(Un, Topo)
 
     ! Download datas
@@ -70,6 +70,8 @@ program StVenant
     call save_error(df, Uexact, Un, 0, 20)
 
     t_iter = 0
+    df%dt  = time_step(df, Wn)
+    tn = df%t0 + df%dt
 
     ! -- Time loop -- !
     do t_iter=1,df%niter
@@ -97,7 +99,8 @@ program StVenant
 
 
     ! Deallocate all tensors
-    deallocate(Un, Uexact)
+    deallocate(X)
+    deallocate(Un, Wn, Uexact)
     deallocate(Topo)
 
     print*, " "

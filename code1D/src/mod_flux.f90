@@ -23,8 +23,7 @@ contains
         SELECT CASE(df%Riemann_solv)
         CASE(1)
 
-            Se = max(abs(Ug(2)/Ug(1)+SQRT(grav*Ug(1))), abs(Ud(2)/Ud(1)+SQRT(grav*Ud(1))), &
-                abs(Ug(2)/Ug(1)-SQRT(grav*Ug(1))), abs(Ud(2)/Ud(1)-SQRT(grav*Ud(1))))
+            Se = max(abs(Ug(2)/Ug(1))+SQRT(grav*Ug(1)), abs(Ud(2)/Ud(1))+SQRT(grav*Ud(1)))
 
             Fnum(1) = 0.5_pr*(Ud(2) + Ug(2)) - 0.5_pr*Se*(Ud(1) - Ug(1))
             Fnum(2) = 0.5_pr*(Ud(2)*Ud(2)/Ud(1) + 0.5_pr*grav*Ud(1)*Ud(1) &

@@ -13,10 +13,10 @@ Nx = 100
 t0 = 0.0
 niter = 1000
 tfinal = 3.0
-cfl = 0.5
+cfl = 0.25
 
 [RIEMANN SCHEME] (1: Rusanov, 2: HLL, 3: VFRoe)
-Riemann_solv = 1
+Riemann_solv = 2
 
 [Ordre]
 ordre = 2

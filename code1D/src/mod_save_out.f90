@@ -1,6 +1,7 @@
 module save_out_mod
 
     use data_reader
+    use topography_mod
     implicit none
 
     public save_approx_sol, save_exact_sol, save_topography
@@ -76,6 +77,7 @@ contains
         type(DataType), intent(in)          :: data
         real(pr), dimension(:), intent(in)  :: X
         integer, intent(in)                 :: iter
+        ! real(pr), intent(in)                :: tn
         real(pr), dimension(:), intent(in)  :: Topo
 
         !Local
@@ -95,6 +97,7 @@ contains
 
             write(10,*) "## xk ", " topo"
             do k=1,data%Nx
+                ! write(10,*) X(k), topography1D(data, X(K), tn)
                 write(10,*) X(k), Topo(k)
             end do
 

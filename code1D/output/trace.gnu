@@ -21,7 +21,7 @@ set palette defined ( 0 '#F7FBFF',\
 #set zrange [0.0:0.2]
 set xrange [-21.0:21.0]
 #set yrange [9.0:13.0]
-set yrange [0.0:3.0]
+#set yrange [0.0:3.0]
 
 # si affichage 3D, fixe le point de vue. A changer selon les cas.
 #set view 100,100
@@ -30,13 +30,14 @@ set yrange [0.0:3.0]
 set term gif animate 
 set output "sol.gif"
 
-do for [i = 0:1000:10] {
+do for [i = 0:1000:2] {
     set title "iter = ".sprintf("%d", i)
     show title
 
     #-> 1D
     #plot "sol1D/sol.".i.".dat" u 1:2 title "Rusanov", "exact1D/sol.".i.".dat" u 1:2 lc 7 w l title "solution exact"
-    plot "sol1D/sol.".i.".dat" u 1:3 title "Rusanov", "exact1D/sol.".i.".dat" u 1:3 lc 7 w l title "solution exact", "topo1D/topo.".i.".dat" u 1:2 w l lc 8 title "topography"
+    #plot "sol1D/sol.".i.".dat" u 1:3 title "Rusanov", "exact1D/sol.".i.".dat" u 1:3 lc 7 w l title "solution exact", "topo1D/topo.".i.#".dat" u 1:2 w l lc 8 title "topography"
+    plot "sol1D/sol.".i.".dat" u 1:3 title "Rusanov", "topo1D/topo.".i.".dat" u 1:2 w l lc 8 title "topography"
     #plot "sol1D/sol.".i.".dat" u 1:4 title "Rusanov", "exact1D/sol.".i.".dat" u 1:4 lc 7 w l title "solution exact"
 
     # fait un affichage 2D en couleur
