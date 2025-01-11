@@ -3,7 +3,6 @@ module time_scheme_mod
     use flux_mod
     use topography_mod
     use musl_mod
-    use polynom_mod
     implicit none
 
     public time_step
@@ -35,11 +34,11 @@ contains
 
         !Local
         integer  :: e, i
-        real(pr) :: lambda, He, Xe
+        real(pr) :: lambda, He, Xe, Hi, Xi
         real(pr), dimension(2) :: Src, Fe, phi, Fl, Fr 
         real(pr), dimension(df%Nx-1)    :: H, X
         real(pr), dimension(df%Nx-1, 2) :: F
-        real(pr), dimension(1:df%Nx, 2) :: Upl, Upr, Wpg, Wpd
+        real(pr), dimension(1:df%Nx, 2) :: Upl, Upr, Wpl, Wpr
 
 
 
@@ -86,9 +85,6 @@ contains
 
             CASE(2) ! -- Ordre 2 (MUSCL-Hancock scheme)
 
-                !call apply_poly(df, Un, Upg, Upd)
-                !print*, "Upg: ", Upg
-
                 df%dt  = time_step(df, Un)
                 lambda = df%dt/df%dx
 
@@ -110,26 +106,38 @@ contains
                 Upr(1,:) = Upr(2,:)
                 Upl(df%Nx,:) = Upl(df%Nx-1,:)
 
+                Wpl = sol_rewrite(Upl, Topo)
+                Wpr = sol_rewrite(Upr, Topo)
+
                 do e=1,df%Nx-1
 
-                    Fe = flux_num(df, Upr(e,:), Upl(e+1,:))
+                    ! Fe = flux_num(df, Upr(e,:), Upl(e+1,:))
+                    ! F(e,:) = Fe(:)
+
+                    Fe = flux_num(df, Wpr(e,:), Wpl(e+1,:))
+                    He = H_bar(Wpr(e,:), Wpl(e+1,:), Fe)
+                    Xe = X_bar(Wpr(e,:), Wpl(e+1,:), Upr(e,:), Upl(e+1,:), Fe)
+                    
 
                     F(e,:) = Fe(:)
-                enddo
+                    H(e)   = He
+                    X(e)   = Xe
 
-                ! Wpg = sol_rewrite(Upg, Topo)
-                ! Wpd = sol_rewrite(Upd, Topo)
+                enddo
 
                 ! -- Celle loop
                 do i=2,df%Nx-1
 
-                    ! Src(1) = 0.0_pr
-                    ! Src(2) = H(i-1)*H(i)*(X(i) - X(i-1))
+                    Hi = H_bar(Wpl(i,:), Wpr(i,:), Fe)
+                    Xi = X_bar(Wpl(i,:), Wpr(i,:), Upl(i,:), Upr(i,:), Fe)
+
+                    Src(1) = 0.0_pr
+                    Src(2) = H(i-1)*Hi*(Xi - X(i-1)) + Hi*H(i)*(X(i) - Xi) 
 
 
-                    Un(i,:) = Un(i,:) - lambda*(F(i,:) - F(i-1,:))
-                    ! Un(i,:) = Un(i,:) - lambda*(X(i)*F(i,:) - X(i-1)*F(i-1,:)) &
-                    !             + 0.5_pr*grav*lambda*Src(:)
+                    !Un(i,:) = Un(i,:) - lambda*(F(i,:) - F(i-1,:))
+                    Un(i,:) = Un(i,:) - lambda*(X(i)*F(i,:) - X(i-1)*F(i-1,:)) &
+                                + 0.5_pr*grav*lambda*Src(:)
 
                 enddo
 
