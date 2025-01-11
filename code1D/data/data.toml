@@ -7,18 +7,19 @@
 x_min = -20.0
 Lx = 40.0
 Ly = 1.0
-Nx = 20
+Nx = 100
 
 [TIME] (VF scheme)
 t0 = 0.0
 niter = 1000
-cfl = 0.9
+tfinal = 3.0
+cfl = 0.5
 
 [RIEMANN SCHEME] (1: Rusanov, 2: HLL, 3: VFRoe)
 Riemann_solv = 1
 
 [Ordre]
-ordre = 1
+ordre = 2
 
 [NUMERICAL TEST]
 #> 1: Dam-break

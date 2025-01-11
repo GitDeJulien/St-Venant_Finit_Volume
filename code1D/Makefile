@@ -23,6 +23,8 @@ SRC_FILES = $(SRC_DIR)/mod_data.f90 \
 			$(SRC_DIR)/mod_topography.f90 \
 			$(SRC_DIR)/mod_init.f90 \
 			$(SRC_DIR)/mod_sol_exact.f90 \
+			$(SRC_DIR)/mod_polynom.f90 \
+			$(SRC_DIR)/mod_musl.f90 \
 			$(SRC_DIR)/mod_flux.f90 \
 			$(SRC_DIR)/mod_time_scheme.f90 \
 			$(SRC_DIR)/mod_save_out.f90 \

@@ -16,7 +16,7 @@ program StVenant
     use save_out_mod
     implicit none
 
-    character(len=125)                      :: filepath, ch_Nx
+    character(len=125)                      :: filepath, ch_Nx, ch_Riemann
     integer                                 :: ios
     real(pr), dimension(:), allocatable     :: X
     real(pr), dimension(:,:), allocatable   :: Un, Unp1, Uexact
@@ -52,7 +52,7 @@ program StVenant
     Topo = topo_fct(df, X, 0.0_pr)
 
     Unp1 = Un
-    Wn = sol_rewrite(df, Un, Topo)
+    Wn = sol_rewrite(Un, Topo)
 
     ! Download datas
     call save_topography(df, X, 0, Topo)
@@ -60,35 +60,25 @@ program StVenant
     call save_approx_sol(df, X, 0, Un, Wn)
 
     write(ch_Nx, '(I5)') df%Nx
-    open(unit=20, file="output/error/err."//trim(adjustl(ch_Nx))//".dat", status='REPLACE', action='WRITE', iostat=ios)
+    write(ch_Riemann, '(I10)') df%Riemann_solv
+    open(unit=20, file="output/error/err.Nx."//trim(adjustl(ch_Nx))//"&
+    &.solv."//trim(adjustl(ch_Riemann))//".dat", status='REPLACE', action='WRITE', iostat=ios)
     if (ios /= 0) then
         print *, 'Error opening file: ', " output/error/err.dat"
         stop
     end if
     call save_error(df, Uexact, Un, 0, 20)
 
-    ! df%dt = time_step(df, Wn)
-    !df%dt = 10e-4
-    !tn = df%t0 + df%dt
+    t_iter = 0
 
     ! -- Time loop -- !
     do t_iter=1,df%niter
 
         ! One more time step
-        call advance(df, Un, Wn, Unp1)
-
-        ! df%dt = time_step(df, Wn)
-        tn = tn + df%dt
-
-        ! Topography
-        Topo = topo_fct(df, X, tn)
+        call advance(df, tn, X, Un, Wn, Topo)
 
         ! Compute exact sol
         call exact_sol_fct(df, X, tn, Uexact(:,1), Uexact(:,2))
-
-        ! Update solution and time step
-        Un = Unp1
-        Wn = sol_rewrite(df, Un, Topo)
 
         !print*, "invariant: ", SUM(Un(:,2)/Un(:,1) - 2*SQRT(grav*Un(:,1))), SUM(Un(:,2)/Un(:,1) + 2*SQRT(grav*Un(:,1)))
         !print*, "dt=", df%dt
@@ -98,6 +88,8 @@ program StVenant
         call save_exact_sol(df, X, t_iter, Uexact, Topo)
         call save_topography(df, X, t_iter, Topo)
         call save_error(df, Uexact, Un, t_iter, 20)
+
+        !if (tn > df%tfinal) exit
 
     enddo
     ! -- End Time loop -- !

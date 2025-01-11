@@ -23,8 +23,8 @@ contains
         SELECT CASE(df%Riemann_solv)
         CASE(1)
 
-            Se = max(abs(Ug(2)+SQRT(grav*Ug(1))), abs(Ud(2)+SQRT(grav*Ud(1))), &
-                abs(Ug(2)-SQRT(grav*Ug(1))), abs(Ud(2)-SQRT(grav*Ud(1))))
+            Se = max(abs(Ug(2)/Ug(1)+SQRT(grav*Ug(1))), abs(Ud(2)/Ud(1)+SQRT(grav*Ud(1))), &
+                abs(Ug(2)/Ug(1)-SQRT(grav*Ug(1))), abs(Ud(2)/Ud(1)-SQRT(grav*Ud(1))))
 
             Fnum(1) = 0.5_pr*(Ud(2) + Ug(2)) - 0.5_pr*Se*(Ud(1) - Ug(1))
             Fnum(2) = 0.5_pr*(Ud(2)*Ud(2)/Ud(1) + 0.5_pr*grav*Ud(1)*Ud(1) &
@@ -32,8 +32,8 @@ contains
                             * (Ud(2) - Ug(2))
         CASE(2)
 
-            Sl = min(Ug(2)-SQRT(grav*Ug(1)), Ud(2)-SQRT(grav*Ud(1)))
-            Sr = min(Ud(2)+SQRT(grav*Ud(1)), Ug(2)+SQRT(grav*Ug(1)))
+            Sl = min(Ug(2)/Ug(1)-SQRT(grav*Ug(1)), Ud(2)/Ud(1)-SQRT(grav*Ud(1)))
+            Sr = max(Ud(2)/Ud(1)+SQRT(grav*Ud(1)), Ug(2)/Ug(1)+SQRT(grav*Ug(1)))
 
             if (Sl >= 0.0_pr) then
                 Fnum(1) = Ug(2)
@@ -46,9 +46,10 @@ contains
             else
 
                 Fnum(1) = (Sr*Ug(2) - Sl*Ud(2) + (Sl*Sr)*(Ud(1) - Ug(1)))/(Sr-Sl)
-                Fnum(2) = ((Sr*(Ug(2)*Ug(2)/Ug(1) + 0.5_pr*grav*Ug(1)*Ug(1)) &
-                                - Sl*(Ud(2)*Ud(2)/Ud(1) + 0.5_pr*grav*Ud(1)*Ud(1))) &
+                Fnum(2) = (Sr*(Ug(2)*Ug(2)/Ug(1) + 0.5_pr*grav*Ug(1)*Ug(1)) &
+                                - Sl*(Ud(2)*Ud(2)/Ud(1) + 0.5_pr*grav*Ud(1)*Ud(1)) &
                                 + (Sl*Sr) * (Ud(2) - Ug(2)))/(Sr-Sl)
+
             endif
 
 
@@ -102,22 +103,35 @@ contains
         !Out
         real(pr) :: vp
 
-        vp = max(abs(Ug(2)+SQRT(grav*Ug(1))), abs(Ud(2)+SQRT(grav*Ud(1))), &
-                abs(Ug(2)-SQRT(grav*Ug(1))), abs(Ud(2)-SQRT(grav*Ud(1))))
+        vp = max(abs(Ug(2)/Ug(1)+SQRT(grav*Ug(1))), abs(Ud(2)/Ud(1)+SQRT(grav*Ud(1))), &
+                abs(Ug(2)/Ug(1)-SQRT(grav*Ug(1))), abs(Ud(2)/Ud(1)-SQRT(grav*Ud(1))))
 
 
     end function eigen_value
 
-    function sol_rewrite(df, Un, Topo) result(Wn)
+    function flux_exact(U) result(F)
 
         !In
-        type(DataType), intent(in)           :: df
+        real(pr), dimension(:), intent(in) :: U
+
+        !Out
+        real(pr), dimension(2) :: F
+
+        F(1) = U(2)
+        F(2) = U(2)*U(2)/U(1) + 0.5_pr*grav*U(1)*U(1)
+
+    end function
+
+    function sol_rewrite(Un, Topo) result(Wn)
+
+        !In
         real(pr), dimension(:,:), intent(in) :: Un
         real(pr), dimension(:), intent(in)   :: Topo
 
 
         !Out
-        real(pr), dimension(df%Nx, 2) :: Wn
+        real(pr), dimension(size(Un,1), 2) :: Wn
+
 
         Wn(:,1) = Un(:,1) + Topo(:)
         Wn(:,2) = Wn(:,1) * Un(:,2)/Un(:,1)

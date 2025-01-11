@@ -110,17 +110,18 @@ contains
         integer, intent(in) :: iter, io
 
         !Local
-        real(pr) :: errorL2
+        real(pr) :: errorL1, errorL2
 
-        errorL2 = SUM((Uexact(:,1)-Un(:,1))**2, 1) + SUM((Uexact(:,2)-Un(:,2))**2, 1)
-        errorL2 = SQRT(errorL2/(SUM(Uexact(:,1)) + SUM(Uexact(:,2)))**2)
+        errorL2 = SUM((Uexact(:,2)-Un(:,2))**2)/SUM(Uexact(:,2)**2)
+        errorL2 = SQRT(errorL2)
+
+        errorL1 = SUM(ABS(Uexact(:,2)-Un(:,2))/ABS(Uexact(:,2)))
+        errorL1 = 1._pr/df%Nx*(errorL1)
 
 
         print*, "L2 error: ", errorL2
 
-        if (iter == 0) write(io, *) "## error L2  "
-
-        write(io, *) errorL2
+        write(io, *) errorL1, errorL2
 
         if (iter == df%niter) close(io)
 

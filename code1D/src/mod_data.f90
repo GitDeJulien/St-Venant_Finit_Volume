@@ -18,6 +18,7 @@ module data_reader
         ![TIME] (implicite scheme)
         real(pr) :: t0
         integer  :: niter
+        real(pr) :: tfinal
         real(pr) :: cfl
         real(pr) :: dt
 
@@ -48,15 +49,16 @@ contains
 
         call parse_toml(filename, "t0", data%t0)
         call parse_toml(filename, "niter", data%niter)
+        call parse_toml(filename, "tfinal", data%tfinal)
         call parse_toml(filename, "cfl", data%cfl)
 
         call parse_toml(filename, "test_case", data%test_case)
         call parse_toml(filename, "Riemann_solv", data%Riemann_solv)
         call parse_toml(filename, "ordre", data%ordre)
 
-        data%dx = data%Lx/data%Nx
+        data%dx = data%Lx/(data%Nx)
 
-        data%dt = 1.0
+        !data%dt = 1.0
 
     end subroutine config_data
     

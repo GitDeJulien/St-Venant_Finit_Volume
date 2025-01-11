@@ -20,7 +20,8 @@ set palette defined ( 0 '#F7FBFF',\
 # si affichage 3D, force l'étendue de l'axe des z. A changer selon les cas.
 #set zrange [0.0:0.2]
 set xrange [-21.0:21.0]
-set yrange [9.0:13.0]
+#set yrange [9.0:13.0]
+set yrange [0.0:3.0]
 
 # si affichage 3D, fixe le point de vue. A changer selon les cas.
 #set view 100,100
@@ -29,7 +30,7 @@ set yrange [9.0:13.0]
 set term gif animate 
 set output "sol.gif"
 
-do for [i = 0:10000:50] {
+do for [i = 0:1000:10] {
     set title "iter = ".sprintf("%d", i)
     show title
 

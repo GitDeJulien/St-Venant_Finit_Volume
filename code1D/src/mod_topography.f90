@@ -45,9 +45,9 @@ contains
         SELECT CASE(data%test_case)
             case(1) !> dam break
                 !z0n = 0.01_pr
-                !z0n = 0.1_pr
-                z0n = 10.0_pr
-                !z0n = SIN(2*pi*tn/0.07)
+                z0n = 0.1_pr
+                !z0n = 10.0_pr
+                !z0n = SIN(2*pi*tn/0.07) + 1.1
 
             case(2) !> subcritical and transcritical flow over a bump
                 if (xk < 12 .and. xk > 8) then
