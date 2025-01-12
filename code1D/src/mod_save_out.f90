@@ -113,16 +113,32 @@ contains
         integer, intent(in) :: iter, io
 
         !Local
+        integer  :: i
         real(pr) :: errorL1, errorL2
+        real(pr) :: s1!, s2
 
-        errorL2 = SUM((Uexact(:,2)-Un(:,2))**2)/SUM(Uexact(:,2)**2)
-        errorL2 = SQRT(errorL2)
+        s1 = 0.d0
+        ! s2 = 0.d0
+        do i=1,df%Nx
+            s1 = s1 + df%dx*(Uexact(i,1)-Un(i,1))*(Uexact(i,1)-Un(i,1))
+            ! s2 = s2 + Uexact(i,1)*Uexact(i,2)
+        enddo
+        errorL2 = SQRT(s1)
 
-        errorL1 = SUM(ABS(Uexact(:,2)-Un(:,2))/ABS(Uexact(:,2)))
-        errorL1 = 1._pr/df%Nx*(errorL1)
+        do i=1,df%Nx
+            s1 = s1 + abs(Uexact(i,1)-Un(i,1))
+            !s2 = s2 + abs(Uexact(i,1))
+        enddo
+        errorL1 = df%dx*(s1)
+
+        ! errorL2 = SUM((Uexact(1:196,1)-Un(1:196,1))**2)/SUM(Uexact(1:196,1)**2)
+        ! errorL2 = SQRT(errorL2)
+
+        ! errorL1 = SUM(ABS(Uexact(1:196,1)-Un(1:196,1))/ABS(Uexact(1:196,1)))
+        ! errorL1 = 1._pr/df%Nx*(errorL1)
 
 
-        print*, "L2 error: ", errorL2
+        !print*, "L2 error: ", errorL2
 
         write(io, *) errorL1, errorL2
 

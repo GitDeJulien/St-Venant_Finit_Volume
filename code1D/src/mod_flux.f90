@@ -15,7 +15,13 @@ contains
 
         !Out
         real(pr), dimension(2) :: Fnum
+
+        !Local
         real(pr)               :: Se, Sl, Sr
+        real(pr) :: Hroe, Uroe
+        real(pr), dimension(2) :: vp_ip12, d_alpha, phi_ip12
+        real(pr), dimension(2) :: Fg, Fd
+        real(pr), dimension(2,2) :: L_ip12, R_ip12
 
         !! U(1) = h     F(U)(1) = q
         !! U(2) = q     F(U)(2) = q**2/h + g(h**2)/2
@@ -50,6 +56,43 @@ contains
                                 + (Sl*Sr) * (Ud(2) - Ug(2)))/(Sr-Sl)
 
             endif
+
+        CASE(3) ! 1st order Roe Scheme
+
+            Fg(:) = flux_exact(Ug(:))
+            Fd(:) = flux_exact(Ud(:))
+                    
+            Hroe = 0.5*(sqrt(Ug(1))+sqrt(Ud(1)))
+            Uroe = (sqrt(Ug(1))*Ug(2)/Ug(1) + sqrt(Ud(1))*Ud(2)/Ud(1)) / &
+                    (sqrt(Ug(1))+sqrt(Ug(1)))
+                    
+            ! eigenvalues
+            vp_ip12(1) = Uroe - sqrt(grav*Hroe)
+            vp_ip12(2) = Uroe + sqrt(grav*Hroe)
+
+            ! Left eigenvectors
+            L_ip12(1,1) = - 0.5_pr * sqrt(grav/Hroe) 
+            L_ip12(1,2) =   0.5_pr
+            L_ip12(2,1) =   0.5_pr * sqrt(grav/Hroe) 
+            L_ip12(2,2) =   0.5_pr
+                    
+            ! Riemann invariant
+            d_alpha(1) = L_ip12(1,1)*(Ud(1)-Ug(1)) + &
+                            L_ip12(1,2)*(Ud(2)-Ug(2))
+            d_alpha(2) = L_ip12(2,1)*(Ud(1)-Ug(1)) + &
+                            L_ip12(2,2)*(Ud(2)-Ug(2))
+                    
+            ! Right eigenvectors
+            R_ip12(1,1) = - sqrt(Hroe/grav) 
+            R_ip12(1,2) =   sqrt(Hroe/grav)
+            R_ip12(2,1) =   1.0_pr 
+            R_ip12(2,2) =   1.0_pr
+                    
+            phi_ip12(1) = - 0.5_pr * abs(vp_ip12(1)) * d_alpha(1)
+            phi_ip12(2) = - 0.5_pr * abs(vp_ip12(2)) * d_alpha(2)
+
+            Fnum(1) = 0.5_pr*(Fd(1)+Fg(1)) + R_ip12(1,1)*phi_ip12(1) + R_ip12(1,2)*phi_ip12(2)
+            Fnum(2) = 0.5_pr*(Fd(2)+Fg(2)) + R_ip12(2,1)*phi_ip12(1) + R_ip12(2,2)*phi_ip12(2)
 
 
         CASE DEFAULT

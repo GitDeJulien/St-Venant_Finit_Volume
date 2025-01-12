@@ -4,16 +4,16 @@
 #> this file or use the user interface provided by SV
 
 [STRUCTURED STATICAL MESHGRID]
-x_min = -20.0
-Lx = 40.0
+x_min = 0.0
+Lx = 25.0
 Ly = 1.0
-Nx = 100
+Nx = 200
 
 [TIME] (VF scheme)
 t0 = 0.0
 niter = 1000
 tfinal = 3.0
-cfl = 0.25
+cfl = 0.4
 
 [RIEMANN SCHEME] (1: Rusanov, 2: HLL, 3: VFRoe)
 Riemann_solv = 2
@@ -24,9 +24,8 @@ ordre = 2
 [NUMERICAL TEST]
 #> 1: Dam-break
 #> 2: Subcritical and transcritical flow over a bump
-#> 3: Streaming failure
-#> 4: Discontinuous topography with resonant regime
-#> 5: Thacker’s test
+#> 3: Discontinuous topography with resonant regime
+#> 4: Thacker’s test
 test_case = 1
 
 [END OF FILE]

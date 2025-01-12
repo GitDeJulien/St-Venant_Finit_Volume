@@ -8,28 +8,8 @@ module topography_mod
     implicit none
 
     public topography1D
-    public topo_fct
     
 contains
-
-    function topo_fct(df, X, tn) result (Topo)
-
-        !In
-        type(DataType), intent(in) :: df
-        real(pr), dimension(:), intent(in) :: X
-        real(pr), intent(in) :: tn
-
-        !Out
-        real(pr), dimension(df%Nx) :: Topo
-
-        !Local
-        integer :: k
-
-        do k=1,df%Nx
-            Topo = topography1D(df, X(k), tn)
-        enddo
-
-    end function topo_fct
 
     function topography1D(data, xk, tn) result(z0n)
 
@@ -46,8 +26,8 @@ contains
             case(1) !> dam break
                 !z0n = 0.01_pr
                 !z0n = 0.1_pr
-                !z0n = 10.0_pr
-                z0n = SIN(2*pi*tn/0.07) + 1.1
+                z0n = 10.0_pr
+                !z0n = SIN(2*pi*tn/0.07) + 1.1
 
             case(2) !> subcritical and transcritical flow over a bump
                 if (xk < 12.d0 .and. xk > 8.d0) then
@@ -62,7 +42,7 @@ contains
                     z0n = 1.0_pr
                 end if
             case(4)
-                z0n = 1./2.0_pr*(xk*xk-1)
+                z0n = 1./2.0_pr*(xk*xk-1) + 1._pr
             case default
                 z0n = tn
         END SELECT

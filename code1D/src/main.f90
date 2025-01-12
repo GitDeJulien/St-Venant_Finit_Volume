@@ -59,7 +59,7 @@ program StVenant
     call save_exact_sol(df, X, 0, Uexact, Topo)
     call save_approx_sol(df, X, 0, Un, Wn)
 
-    write(ch_Nx, '(I5)') df%Nx
+    write(ch_Nx, '(I4)') df%Nx
     write(ch_Riemann, '(I10)') df%Riemann_solv
     open(unit=20, file="output/error/err.Nx."//trim(adjustl(ch_Nx))//"&
     &.solv."//trim(adjustl(ch_Riemann))//".dat", status='REPLACE', action='WRITE', iostat=ios)
@@ -67,7 +67,7 @@ program StVenant
         print *, 'Error opening file: ', " output/error/err.dat"
         stop
     end if
-    call save_error(df, Uexact, Un, 0, 20)
+    !call save_error(df, Uexact, Un, 0, 20)
 
     t_iter = 0
     df%dt  = time_step(df, Wn)
@@ -82,8 +82,7 @@ program StVenant
         ! Compute exact sol
         call exact_sol_fct(df, X, tn, Uexact(:,1), Uexact(:,2))
 
-        !print*, "invariant: ", SUM(Un(:,2)/Un(:,1) - 2*SQRT(grav*Un(:,1))), SUM(Un(:,2)/Un(:,1) + 2*SQRT(grav*Un(:,1)))
-        !print*, "dt=", df%dt
+        print*, "tn=", tn
 
         ! Save datas
         call save_approx_sol(df, X, t_iter, Un, Wn)

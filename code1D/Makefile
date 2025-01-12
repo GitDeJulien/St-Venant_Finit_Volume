@@ -16,7 +16,7 @@ BUILD_DIR = ./build
 
 # Flags for debug and release builds
 DEBUG_FFLAGS = -g -O0 -Wall -Wextra
-RELEASE_FFLAGS = -O2 -Wall
+RELEASE_FFLAGS = -O3 -Wall
 
 # Automatically find all source files (needed to be in the good order in function of dependancies)
 SRC_FILES = $(SRC_DIR)/mod_data.f90 \
@@ -93,6 +93,12 @@ clear:
 	$(RM) ./output/topo1D/*.dat
 	$(RM) ./output/exact1D/*.dat
 	$(RM) ./output/sol1D/*.dat
+	$(RM) ./output/sol1D/test4/*.dat
+	$(RM) ./output/sol1D/test4_O2/*.dat
+	$(RM) ./output/sol1D/z01/*.dat
+	$(RM) ./output/sol1D/z001/*.dat
+	$(RM) ./output/sol1D/z10/*.dat
+	$(RM) ./output/sol1D/z10_O2/*.dat
 	$(RM) ./output/error/*.dat
 
 

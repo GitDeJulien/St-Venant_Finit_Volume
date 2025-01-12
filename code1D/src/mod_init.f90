@@ -20,7 +20,7 @@ contains
         integer :: k
         real(pr) :: const_init
 
-        const_init = 0.66
+        const_init = 2.0_pr
 
         SELECT CASE(df%test_case)
             CASE(1)
@@ -54,7 +54,7 @@ contains
                     else
                         U0(k,1) = 0.0_pr
                     endif
-                    U0(k,2) = 0.0_pr
+                    U0(k,2) = 0.01_pr
                 enddo
             CASE DEFAULT
                 print*, "Error: No case found for 1 dimension."

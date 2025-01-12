@@ -71,8 +71,13 @@ contains
 
                 enddo
 
+                ! -- Neumann homogen
                 Un(1,:) = Un(2,:)
                 Un(df%Nx,:) = Un(df%Nx-1,:) 
+
+                ! -- Dirichlet
+                ! Un(1,2) = 1.53
+                ! Un(df%Nx,1) = 0.66
 
             CASE(2) ! -- Ordre 2 (MUSCL-Hancock scheme)
 
@@ -94,8 +99,13 @@ contains
 
                 enddo
 
+                !--Neumann homogene
                 Upr(1,:) = Upr(2,:)
                 Upl(df%Nx,:) = Upl(df%Nx-1,:)
+
+                !--Dirichlet
+                ! Upr(1,2) = 4.42_pr
+                ! Upl(df%Nx,1) = 2._pr
 
                 Wpl = sol_rewrite(Upl, Topo)
                 Wpr = sol_rewrite(Upr, Topo)
@@ -134,8 +144,13 @@ contains
 
                 enddo
 
+                ! -- Neuman
                 Un(1,:) = Un(2,:)
-                Un(df%Nx,:) = Un(df%Nx-1,:) 
+                Un(df%Nx,:) = Un(df%Nx-1,:)
+                
+                ! -- Dirichlet
+                ! Un(1,2) = 4.42_pr
+                ! Un(df%Nx,1) = 2.0_pr
 
             CASE DEFAULT
                 print*, "No such order case yet coded"
