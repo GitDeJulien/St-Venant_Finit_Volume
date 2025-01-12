@@ -4,8 +4,8 @@
 #> this file or use the user interface provided by SV
 
 [STRUCTURED STATICAL MESHGRID]
-x_min = 0.0
-Lx = 25.0
+x_min = -0.5
+Lx = 0.5
 Ly = 1.0
 Nx = 200
 
