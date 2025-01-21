@@ -25,11 +25,12 @@ contains
         SELECT CASE(df%test_case)
             CASE(1)
                 do k=1,df%Nx
-                    if (X(k) < 0) then
-                        U0(k,1) = 2.0_pr
-                    else
-                        U0(k,1) = 1./2.0_pr
-                    endif
+                    ! if (X(k) < 0) then
+                    !     U0(k,1) = 2.0_pr
+                    ! else
+                    !     U0(k,1) = 1./2.0_pr
+                    ! endif
+                    U0(k,1) = 1./2.0_pr
                     U0(k,2) = 0.0_pr
                 enddo
             CASE(2)

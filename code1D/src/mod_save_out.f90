@@ -97,7 +97,6 @@ contains
 
             write(10,*) "## xk ", " topo"
             do k=1,data%Nx
-                ! write(10,*) X(k), topography1D(data, X(K), tn)
                 write(10,*) X(k), Topo(k)
             end do
 
@@ -105,42 +104,41 @@ contains
 
     end subroutine save_topography
 
-    subroutine save_error(df, Uexact, Un, iter, io)
+    subroutine save_error(df, Uexact, Un, iter, io, tn)
 
         !In
         type(DataType), intent(in) :: df
         real(pr), dimension(:,:), intent(in) :: Uexact, Un
         integer, intent(in) :: iter, io
+        real(pr), intent(in) :: tn
 
         !Local
         integer  :: i
-        real(pr) :: errorL1, errorL2
-        real(pr) :: s1!, s2
+        real(pr) :: errorL1, errorL2, errorL1_u
+        real(pr) :: s1
 
         s1 = 0.d0
         ! s2 = 0.d0
         do i=1,df%Nx
             s1 = s1 + df%dx*(Uexact(i,1)-Un(i,1))*(Uexact(i,1)-Un(i,1))
-            ! s2 = s2 + Uexact(i,1)*Uexact(i,2)
         enddo
         errorL2 = SQRT(s1)
 
+        s1 = 0.d0
         do i=1,df%Nx
             s1 = s1 + abs(Uexact(i,1)-Un(i,1))
-            !s2 = s2 + abs(Uexact(i,1))
         enddo
         errorL1 = df%dx*(s1)
 
-        ! errorL2 = SUM((Uexact(1:196,1)-Un(1:196,1))**2)/SUM(Uexact(1:196,1)**2)
-        ! errorL2 = SQRT(errorL2)
-
-        ! errorL1 = SUM(ABS(Uexact(1:196,1)-Un(1:196,1))/ABS(Uexact(1:196,1)))
-        ! errorL1 = 1._pr/df%Nx*(errorL1)
-
+        s1 = 0.d0
+        do i=1,df%Nx
+            s1 = s1 + abs(Uexact(i,2)/Uexact(i,1)-Un(i,2)/Un(i,1))
+        enddo
+        errorL1_u = df%dx*(s1)
 
         !print*, "L2 error: ", errorL2
 
-        write(io, *) errorL1, errorL2
+        write(io, *) tn, errorL1, errorL2, errorL1_u
 
         if (iter == df%niter) close(io)
 

@@ -4,22 +4,22 @@
 #> this file or use the user interface provided by SV
 
 [STRUCTURED STATICAL MESHGRID]
-x_min = -0.5
-Lx = 0.5
+x_min = -10.0
+Lx = 20.0
 Ly = 1.0
 Nx = 200
 
 [TIME] (VF scheme)
 t0 = 0.0
-niter = 1000
-tfinal = 3.0
+niter = 10000
+tfinal = 10.0
 cfl = 0.4
 
 [RIEMANN SCHEME] (1: Rusanov, 2: HLL, 3: VFRoe)
 Riemann_solv = 2
 
 [Ordre]
-ordre = 2
+ordre = 1
 
 [NUMERICAL TEST]
 #> 1: Dam-break

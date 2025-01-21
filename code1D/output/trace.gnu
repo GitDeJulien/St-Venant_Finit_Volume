@@ -19,9 +19,9 @@ set palette defined ( 0 '#F7FBFF',\
 
 # si affichage 3D, force l'étendue de l'axe des z. A changer selon les cas.
 #set zrange [0.0:0.2]
-set xrange [-2.0:2.0]
+set xrange [-10.0:10.0]
 #set yrange [9.0:13.0]
-set yrange [0.5:4.0]
+set yrange [0.0:1.0]
 
 set xlabel "x"
 set ylabel "h(x,t)"
@@ -40,7 +40,8 @@ do for [i = 0:1000:5] {
 
     #-> 1D
     #plot "sol1D/z001/sol.".i.".dat" u 1:2 title "Z=0.01", "exact1D/sol.".i.".dat" u 1:2 lc 7 w l title "solution exact", "topo1D/topo.#".i.".dat" u 1:2 w l lc 8 title "topography", plot "sol1D/z01/sol.".i.".dat" u 1:2 title "Z=0.1", plot "sol1D/z10/sol.".i.".dat" #u 1:2 title "Z=0.1"
-    plot "sol1D/test2/sol.".i.".dat" u 1:3 pt 3 lc 6 title "second order (HLL)", "topo1D/topo.".i.".dat" u 1:2 w l lc 8 title "topography"
+    plot "sol1D/sol.".i.".dat" u 1:3 pt 3 lc 6 title "first order (HLL)", "topo1D/topo.".i.".dat" u 1:2 w l lc 8 lw 2 title "topography"
+    #plot "sol1D/sol.".i.".dat" u 1:4 pt 3 lc 6 title "first order (HLL)"
 
     # fait un affichage 2D en couleur
     #plot "./sol.".i.".dat" u 1:2:3 palette with image

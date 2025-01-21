@@ -47,6 +47,7 @@ program StVenant
     allocate(Topo(df%Nx))
 
     call init_sol(df, X, Un)
+    Uexact = 0.d0
     call exact_sol_fct(df, X, 0.0_pr, Uexact(:,1), Uexact(:,2))
     do k=1,df%Nx
         Topo(k) = topography1D(df, X(k), 0.d0)
@@ -88,9 +89,9 @@ program StVenant
         call save_approx_sol(df, X, t_iter, Un, Wn)
         call save_exact_sol(df, X, t_iter, Uexact, Topo)
         call save_topography(df, X, t_iter, Topo)
-        call save_error(df, Uexact, Un, t_iter, 20)
+        call save_error(df, Uexact, Un, t_iter, 20, tn)
 
-        !if (tn > df%tfinal) exit
+        if (tn > df%tfinal) exit
 
     enddo
     ! -- End Time loop -- !
